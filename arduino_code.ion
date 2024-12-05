@@ -1,0 +1,32 @@
+// Pin configuration
+const int ledPins[] = {2, 3, 4, 5, 6}; // Define pins for the LEDs
+const int numLeds = sizeof(ledPins) / sizeof(ledPins[0]);
+
+void setup() {
+  // Initialize LED pins as OUTPUT
+  for (int i = 0; i < numLeds; i++) {
+    pinMode(ledPins[i], OUTPUT);
+    digitalWrite(ledPins[i], LOW); // Turn off LEDs initially
+  }
+  
+  // Initialize Serial Communication
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Check if data is available from Serial
+  if (Serial.available() > 0) {
+    // Read the number of fingers (0-5) sent by Python script
+    int fingerCount = Serial.parseInt();
+
+    // Turn off all LEDs
+    for (int i = 0; i < numLeds; i++) {
+      digitalWrite(ledPins[i], LOW);
+    }
+
+    // Light up the corresponding number of LEDs
+    for (int i = 0; i < fingerCount && i < numLeds; i++) {
+      digitalWrite(ledPins[i], HIGH);
+    }
+  }
+}
